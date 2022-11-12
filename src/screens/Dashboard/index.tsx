@@ -1,12 +1,12 @@
-import { useNavigation } from '@react-navigation/core';
-import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useRef, useState } from 'react';
-import { TextInput } from 'react-native';
+import { useNavigation } from "@react-navigation/core";
+import { StackNavigationProp } from "@react-navigation/stack";
+import React, { useRef, useState } from "react";
+import { TextInput } from "react-native";
 
-import { Background } from '../../components/Background';
-import { Card } from '../../components/Card';
+import { Background } from "../../components/Background";
+import { Card } from "../../components/Card";
 
-import { useRepositories } from '../../hooks/useRepositories';
+import { useRepositories } from "../../hooks/useRepositories";
 
 import {
   Container,
@@ -16,20 +16,20 @@ import {
   InputField,
   InputButton,
   Icon,
-  RepositoriesList
-} from './styles';
+  RepositoriesList,
+} from "./styles";
 
 type RootStackParamList = {
   Dashboard: undefined;
   Repository: {
     repositoryId: number;
-  }
+  };
 };
 
-type NavigationProps = StackNavigationProp<RootStackParamList, 'Dashboard'>;
+type NavigationProps = StackNavigationProp<RootStackParamList, "Dashboard">;
 
 export function Dashboard() {
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState("");
   const inputRef = useRef<TextInput>(null);
 
   const { navigate } = useNavigation<NavigationProps>();
@@ -38,50 +38,59 @@ export function Dashboard() {
 
   function handleAddRepository() {
     /**
-     * TODO: 
+     * TODO:
      * - call addRepository function sending inputText value;
      * - clean inputText value.
      */
+    addRepository(inputText);
+    setInputText("");
   }
 
   function handleRepositoryPageNavigation(id: number) {
     /**
      * TODO - navigate to the Repository screen sending repository id.
      * Remember to use the correct prop name (repositoryId) to the repositoy id:
-     * 
+     *
      * navigate(SCREEN NAME, {
      *  repositoryId: id of the repository
      * })
      */
+    navigate("Repository", {
+      repositoryId: id,
+    });
   }
 
   return (
     <Background>
       <Container>
         <AddGithubRepo>
-          <Title>Explore repositórios{'\n'}no GitHub.</Title>
+          <Title>Explore repositórios{"\n"}no GitHub.</Title>
 
           <Input>
             <InputField
               ref={inputRef}
               placeholder="Digite aqui 'usuário/repositório'"
               value={inputText}
+              onChange={(e) => {
+                setInputText(e.nativeEvent.text);
+              }}
               /**
-               * TODO - update inputText value when input text value 
+               * TODO - update inputText value when input text value
                * changes:
                * onChangeText={YOUR CODE HERE}
                */
               onSubmitEditing={handleAddRepository}
               returnKeyType="send"
-              autoCapitalize='none'
+              autoCapitalize="none"
               autoCorrect={false}
             />
 
             <InputButton
               testID="input-button"
               onPress={handleAddRepository}
+              disabled={inputText === ""}
               /**
-               * TODO - ensure to disable button when inputText is 
+               * TODO - ensure to disable button when inputText is
                * empty (use disabled prop to this):
                * disabled={CONDITION HERE}
                */
@@ -94,7 +103,7 @@ export function Dashboard() {
         <RepositoriesList
           data={repositories}
           showsVerticalScrollIndicator={false}
-          keyExtractor={repository => String(repository.id)}
+          keyExtractor={(repository) => String(repository.id)}
           renderItem={({ item: repository }) => (
             <Card
               key={repository.id}
@@ -102,7 +111,7 @@ export function Dashboard() {
                 id: repository.id,
                 title: repository.full_name,
                 subTitle: repository.description,
-                imageUrl: repository.owner.avatar_url
+                imageUrl: repository.owner.avatar_url,
               }}
               onPress={() => handleRepositoryPageNavigation(repository.id)}
             />
@@ -110,5 +119,5 @@ export function Dashboard() {
         />
       </Container>
     </Background>
-  )
+  );
 }
