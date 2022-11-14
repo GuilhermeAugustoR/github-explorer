@@ -60,6 +60,10 @@ export function Dashboard() {
     });
   }
 
+  function handleChangeInputText(text: string) {
+    setInputText(text);
+  }
+
   return (
     <Background>
       <Container>
@@ -71,9 +75,7 @@ export function Dashboard() {
               ref={inputRef}
               placeholder="Digite aqui 'usuário/repositório'"
               value={inputText}
-              onChange={(e) => {
-                setInputText(e.nativeEvent.text);
-              }}
+              onChangeText={handleChangeInputText}
               /**
                * TODO - update inputText value when input text value
                * changes:

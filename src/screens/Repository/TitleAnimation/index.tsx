@@ -5,7 +5,7 @@ import { useSharedValue, withRepeat, withTiming, useAnimatedStyle } from 'react-
 import { Container, TitleContainer, Title } from './styles';
 
 interface TitleAnimationProps {
-  children: string;
+  children: any;
 }
 
 export function TitleAnimation({ children }: TitleAnimationProps) {
